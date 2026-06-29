@@ -1,0 +1,27 @@
+[
+  {
+    "query": "التعليم في المدارس",
+    "expected_audio": "",
+    "expected_text_substr": ""
+  },
+  {
+    "query": "الصحة والرياضة",
+    "expected_audio": "",
+    "expected_text_substr": ""
+  },
+  {
+    "query": "الاقتصاد والتجارة",
+    "expected_audio": "",
+    "expected_text_substr": ""
+  },
+  {
+    "query": "التكنولوجيا والابتكار",
+    "expected_audio": "",
+    "expected_text_substr": ""
+  },
+  {
+    "query": "البيئة والمناخ",
+    "expected_audio": "",
+    "expected_text_substr": ""
+  }
+]

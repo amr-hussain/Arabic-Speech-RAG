@@ -1,0 +1,23 @@
+# torch>=2.6 required by transformers ≥4.46 for safe model loading (CVE-2025-32434)
+# Install with matching CUDA wheels, e.g.:
+#   pip install torch>=2.6 torchaudio>=2.6 --index-url https://download.pytorch.org/whl/cu124
+# torch>=2.6
+# torchaudio>=2.6
+transformers>=4.46,<5.0
+# accelerate==0.33.0
+huggingface_hub>=0.29.0
+sentencepiece==0.2.0
+datasets==2.20.0
+faiss-cpu==1.8.0.post1
+soundfile==0.12.1
+librosa==0.10.2.post1
+numpy==1.26.4
+gradio==4.44.0
+pyyaml==6.0.2
+python-dotenv==1.0.1
+tqdm==4.66.5
+jiwer==3.0.4
+evaluate==0.4.3
+rouge-score==0.1.2
+pandas==2.2.2
+rank_bm25==0.2.2

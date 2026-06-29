@@ -1,0 +1,69 @@
+device: auto            # auto|cuda|cpu
+dtype: fp16             # fp16|fp32   (fp16 only when device == cuda)
+
+# Load models one at a time for low VRAM
+low_vram: true
+
+asr:
+  backend: local                         # local | hf_api
+  model_id: openai/whisper-large-v3-turbo
+  language: ar
+  # set to > 0 if you need short-form chunking
+  chunk_length_s: 0
+  stride_length_s: 0
+  batch_size: 4
+  hf_api_model: openai/whisper-large-v3
+  hf_provider: fal-ai
+
+  generation_kwargs:
+    condition_on_prev_tokens: false
+    compression_ratio_threshold: 2.4
+    logprob_threshold: -1.0
+    no_speech_threshold: 0.6
+    num_beams: 1
+    no_repeat_ngram_size: 3
+    temperature: [0.0, 0.2, 0.4]         # fallback cascade on failed thresholds
+
+  dedup:
+    max_token_run: 2                     # trim runs of repeated tokens beyond this
+    max_token_repeat_ratio: 0.6          # drop segments where one token dominates
+    min_similarity: 0.85                 # drop a segment ≥ this fuzzy to the previous one
+
+  merge:
+    target_words: 60                     # aim for this many words per passage
+    max_words: 100                       # hard cap
+    max_seconds: 30.0                    # hard cap (wall-clock)
+    overlap_segments: 1                  # carry-over tail for cross-boundary recall
+
+summarize:
+  model_id: csebuetnlp/mT5_multilingual_XLSum
+  max_input_tokens: 512
+  max_new_tokens: 128
+  min_new_tokens: 32
+  num_beams: 4
+  window_chars: 2000
+
+embed:
+  model_id: intfloat/multilingual-e5-base
+  query_prefix: "query: "
+  passage_prefix: "passage: "
+  batch_size: 16
+  max_length: 256
+
+index:
+  dir: data/index
+  faiss_file: faiss.index
+  meta_file: metadata.jsonl
+  bm25_file: bm25.jsonl
+  dim: 768                               # intfloat/multilingual-e5-base output dim
+
+paths:
+  raw_dir: data/raw
+  transcripts_dir: data/transcripts
+  summaries_dir: data/summaries
+
+search:
+  mode: hybrid                           # semantic | lexical | hybrid
+  top_k: 5
+  fetch_k: 50                            # per-ranker candidates before RRF
+  rrf_k: 60                              # RRF constant (higher = flatter fusion)
